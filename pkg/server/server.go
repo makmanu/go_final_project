@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"net/http"
+	"time"
 )
 
 func Start_server(port string) error {
@@ -18,4 +19,8 @@ func Start_server(port string) error {
 		return err
 	}
 	return nil
+}
+	
+func afterNow(date time.Time, now time.Time) bool {
+	return false	
 }
