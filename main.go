@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"time"
 
 	"github.com/makmanu/go_final_project/pkg/db"
 	"github.com/makmanu/go_final_project/pkg/server"
