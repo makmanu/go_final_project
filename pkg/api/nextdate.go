@@ -34,10 +34,7 @@ func HandleQuery(w http.ResponseWriter, req *http.Request) {
 
 func afterNow(date time.Time, now time.Time) bool {
 	dur := date.Sub(now)
-	if dur > 0 {
-		return true
-	}
-	return false
+	return dur > 0 
 }
 
 func nextDate(now string, dstart string, repeat string) (string, error) {
