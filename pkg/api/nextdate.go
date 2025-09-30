@@ -63,7 +63,7 @@ func nextDate(now string, dstart string, repeat string) (string, error) {
 		}
 	case "d":
 		if len(repeatRules) != 2 {
-			return "", errors.New("cant determine number of days")
+			return "", errors.New("day repeat rule is invalid")
 		}
 		numberOfDays, err := strconv.Atoi(repeatRules[1])
 		if err != nil {

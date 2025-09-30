@@ -1,8 +1,89 @@
 package api
 
-import "net/http"
+import (
+	"bytes"
+	"encoding/json"
+	"log"
+	"net/http"
+	"time"
 
+	"github.com/makmanu/go_final_project/pkg/db"
+)
+
+var task *db.Task
+
+type taskError struct {
+    Error      error `json:"error"`
+}
+var jsonError taskError
+
+func checkDate(task *db.Task) error {
+	now := time.Now()
+	if len(task.Date) == 0 {
+            task.Date = now.Format("20060102")
+	}
+	if task.Date == now.Format("20060102") {
+			return nil
+	}
+	t, err := time.Parse("20060102", task.Date)
+	if err != nil {
+		return err
+	}
+	if afterNow(now, t) {
+        if len(task.Repeat) == 0 {
+            task.Date = now.Format("20060102")
+        } else {
+            task.Date, err = nextDate(now.Format("20060102"), task.Date, task.Repeat)		
+			if err != nil {
+				return err
+			}
+        }
+    }
+	return nil
+}
+
+func writeJson(w http.ResponseWriter, data any) {
+	resp, err := json.Marshal(data)
+	if err != nil {
+		jsonError.Error = err
+		writeJson(w, jsonError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
+}
 
 func addTaskHandler(w http.ResponseWriter, r *http.Request) {
-	
+	var buf bytes.Buffer
+
+	_, err := buf.ReadFrom(r.Body)
+	if err != nil {
+		jsonError.Error = err
+		writeJson(w, jsonError)
+		return
+	}
+	if err := json.Unmarshal(buf.Bytes(), &task); err != nil {
+		jsonError.Error = err
+		writeJson(w, jsonError)
+		return
+	}
+	log.Print("\nget task:", task.Title, "\nwith comment: ", task.Comment, "\ndate: ", task.Date, "\nrepeat rule: ", task.Repeat)
+	if len(task.Title) == 0 {
+		jsonError.Error = err
+		writeJson(w, jsonError)
+		return
+	}
+	if err := checkDate(task); err != nil {
+		jsonError.Error = err
+		writeJson(w, jsonError)
+		return
+	}
+	task.ID, err = db.AddTask(task)
+	if err != nil {
+		jsonError.Error = err
+		writeJson(w, jsonError)
+		return
+	}
+	writeJson(w, task)
 }

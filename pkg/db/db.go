@@ -11,7 +11,7 @@ import (
 var db *sql.DB
 
 type Task struct {
-    ID      string `json:"id"`
+    ID      int64 `json:"id"`
     Date    string `json:"date"`
     Title   string `json:"title"`
 	Comment string `json:"comment"`
@@ -27,11 +27,10 @@ func Init(dbFile string) error {
 		install = true
 	}
 
-	db, err := sql.Open("sqlite", dbFile)
+	db, err = sql.Open("sqlite", dbFile)
 	if err != nil {
 		return err
 	}
-	defer db.Close()
 
 	if install {
 		schema := `

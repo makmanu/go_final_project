@@ -83,7 +83,7 @@ type task struct {
 
 func TestAddTask(t *testing.T) {
 	db := openDB(t)
-	defer db.Close()
+	
 
 	tbl := []task{
 		{"20240129", "", "", ""},
@@ -148,7 +148,7 @@ func TestAddTask(t *testing.T) {
 				continue
 			}
 			if today && task.Date != now.Format(`20060102`) {
-				t.Errorf("Дата должна быть сегодняшняя %v", v)
+				t.Errorf("Дата должна быть сегодняшняя %v %v %v", v, today, task.Date)
 			}
 		}
 	}
