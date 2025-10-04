@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"bytes"
 	"encoding/json"
 	"log"
@@ -81,7 +82,7 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	Id, err := db.AddTask(task)
-	task.ID = string(Id)
+	task.ID = fmt.Sprint(Id)
 	if err != nil {
 		jsonError.Error = err
 		writeJson(w, jsonError)
