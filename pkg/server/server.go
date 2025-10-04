@@ -15,6 +15,7 @@ func Start_server(port string) error {
 	http.Handle("/", http.FileServer(http.Dir(webDir)))
 	http.HandleFunc("/api/nextdate", api.HandleQuery)
 	http.HandleFunc("/api/task", api.TaskHandler)
+	http.HandleFunc("/api/tasks", api.TasksHandler)
 
 	err := http.ListenAndServe(port, nil)
 	if err != nil{

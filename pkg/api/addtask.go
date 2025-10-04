@@ -51,6 +51,7 @@ func writeJson(w http.ResponseWriter, data any) {
 	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
+	log.Println("response with:", data)
 	w.Write(resp)
 }
 
@@ -79,7 +80,8 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 		writeJson(w, jsonError)
 		return
 	}
-	task.ID, err = db.AddTask(task)
+	Id, err := db.AddTask(task)
+	task.ID = string(Id)
 	if err != nil {
 		jsonError.Error = err
 		writeJson(w, jsonError)

@@ -11,7 +11,7 @@ import (
 var db *sql.DB
 
 type Task struct {
-    ID      int64 `json:"id"`
+    ID      string `json:"id"`
     Date    string `json:"date"`
     Title   string `json:"title"`
 	Comment string `json:"comment"`
@@ -62,4 +62,24 @@ func AddTask(task *Task) (int64, error) {
         id, err = res.LastInsertId()
     }
     return id, err
-} 
+}
+
+func Tasks(amount int64) ([]*Task, error){
+	responseTasks := []*Task{}
+	rows, err := db.Query("SELECT id, date, title, comment, repeat FROM scheduler ORDER BY id LIMIT :amount", sql.Named("amount", amount))
+	if err != nil {
+		return responseTasks, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var currentTask Task
+	
+		err := rows.Scan(&currentTask.ID, &currentTask.Date, &currentTask.Title, &currentTask.Comment, &currentTask.Repeat)
+		if err != nil {
+			return responseTasks, err
+		}
+		responseTasks = append(responseTasks, &currentTask)
+	}
+	return responseTasks, nil
+}
