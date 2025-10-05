@@ -14,7 +14,7 @@ import (
 var task *db.Task
 
 type taskError struct {
-    Error      error `json:"error"`
+    Error      string `json:"error"`
 }
 var jsonError taskError
 
@@ -46,7 +46,7 @@ func checkDate(task *db.Task) error {
 func writeJson(w http.ResponseWriter, data any) {
 	resp, err := json.Marshal(data)
 	if err != nil {
-		jsonError.Error = err
+		jsonError.Error = err.Error()
 		writeJson(w, jsonError)
 		return
 	}
@@ -61,30 +61,30 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	_, err := buf.ReadFrom(r.Body)
 	if err != nil {
-		jsonError.Error = err
+		jsonError.Error = err.Error()
 		writeJson(w, jsonError)
 		return
 	}
 	if err := json.Unmarshal(buf.Bytes(), &task); err != nil {
-		jsonError.Error = err
+		jsonError.Error = err.Error()
 		writeJson(w, jsonError)
 		return
 	}
 	log.Print("\nget task:", task.Title, "\nwith comment: ", task.Comment, "\ndate: ", task.Date, "\nrepeat rule: ", task.Repeat)
 	if len(task.Title) == 0 {
-		jsonError.Error = err
+		jsonError.Error = "no Title"
 		writeJson(w, jsonError)
 		return
 	}
 	if err := checkDate(task); err != nil {
-		jsonError.Error = err
+		jsonError.Error = err.Error()
 		writeJson(w, jsonError)
 		return
 	}
 	Id, err := db.AddTask(task)
 	task.ID = fmt.Sprint(Id)
 	if err != nil {
-		jsonError.Error = err
+		jsonError.Error = err.Error()
 		writeJson(w, jsonError)
 		return
 	}

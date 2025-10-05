@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"os"
 
 	_ "modernc.org/sqlite"
@@ -92,3 +93,24 @@ func GetTask(id string) (*Task, error) {
 	}
 	return task, nil
 }
+
+func UpdateTask(task *Task) error {
+    query := `UPDATE scheduler SET date = :date, title = :title, comment = :comment, repeat = :repeat WHERE id = :id`
+    res, err := db.Exec(query, 
+		sql.Named("date", task.Date),
+		sql.Named("title", task.Title),
+		sql.Named("comment", task.Comment),
+		sql.Named("repeat", task.Repeat),
+		sql.Named("id", task.ID))
+    if err != nil {
+        return err
+    }
+    count, err := res.RowsAffected()
+    if err != nil {
+        return err
+    }
+    if count == 0 {
+        return errors.New(`incorrect id for updating task`)
+    }
+    return nil
+} 

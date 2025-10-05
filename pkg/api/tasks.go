@@ -11,7 +11,7 @@ type TasksResp struct {
 func TasksHandler(w http.ResponseWriter, r *http.Request){
 	tasks, err := db.Tasks(50)
     if err != nil {
-        jsonError.Error = err
+        jsonError.Error = err.Error()
 		writeJson(w, jsonError)
         return
     }
