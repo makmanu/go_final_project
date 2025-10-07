@@ -1,7 +1,11 @@
 package api
 
-import ("net/http"
-		"github.com/makmanu/go_final_project/pkg/db")
+import (
+	"log"
+	"net/http"
+
+	"github.com/makmanu/go_final_project/pkg/db"
+)
 
 
 type TasksResp struct {
@@ -9,7 +13,8 @@ type TasksResp struct {
 }
 
 func TasksHandler(w http.ResponseWriter, r *http.Request){
-	tasks, err := db.Tasks(50)
+	log.Println("start to handle /api/tasks")
+    tasks, err := db.Tasks(50)
     if err != nil {
         jsonError.Error = err.Error()
 		writeJson(w, jsonError)

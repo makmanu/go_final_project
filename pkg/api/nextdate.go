@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -12,6 +13,7 @@ import (
 
 func HandleQuery(w http.ResponseWriter, req *http.Request) {
 	var now string
+	log.Println("start to handle /api/nextdate")
 	if req.URL.Query().Has("now"){
 		now = req.URL.Query().Get("now")
 	} else {
@@ -38,7 +40,7 @@ func afterNow(date time.Time, now time.Time) bool {
 }
 
 func nextDate(now string, dstart string, repeat string) (string, error) {
-	
+
 	if len(repeat) == 0 {
 		return "", errors.New("repeat rule is missing")
 	}
@@ -77,7 +79,7 @@ func nextDate(now string, dstart string, repeat string) (string, error) {
 			resultDate = resultDate.AddDate(0, 0, numberOfDays)
 		}
 	default:
-		return "", errors.New("invalid rule")
+		return "", errors.New("invalid rule for next date: "+repeatRules[0])
 	}	
 
 	return resultDate.Format("20060102"), nil

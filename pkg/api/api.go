@@ -11,5 +11,7 @@ func TaskHandler(w http.ResponseWriter, r *http.Request) {
         getTaskById(w, r)
     case http.MethodPut:
         updateTask(w, r)
+    case http.MethodDelete:
+        deleteTask(w, r)
     }
 }

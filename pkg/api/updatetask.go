@@ -12,6 +12,7 @@ import (
 
 func updateTask(w http.ResponseWriter, r *http.Request) {
 	var buf bytes.Buffer
+	log.Println("start to handle /api/task put")
 
 	_, err := buf.ReadFrom(r.Body)
 	if err != nil {

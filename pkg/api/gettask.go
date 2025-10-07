@@ -1,12 +1,14 @@
 package api
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/makmanu/go_final_project/pkg/db"
 )
 
 func getTaskById(w http.ResponseWriter, r *http.Request) {
+	log.Println("start to handle /api/task get")
 	id := r.URL.Query().Get("id")
 	if len(id) == 0 {
 		jsonError.Error = "missing ID"

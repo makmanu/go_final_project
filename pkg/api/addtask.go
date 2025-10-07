@@ -14,7 +14,7 @@ import (
 var task *db.Task
 
 type taskError struct {
-    Error      string `json:"error"`
+    Error      string `json:"error,omitempty"`
 }
 var jsonError taskError
 
@@ -58,6 +58,7 @@ func writeJson(w http.ResponseWriter, data any) {
 
 func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var buf bytes.Buffer
+	log.Println("start to handle /api/task post")
 
 	_, err := buf.ReadFrom(r.Body)
 	if err != nil {
