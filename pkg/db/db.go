@@ -51,6 +51,20 @@ CREATE INDEX scheduler_date ON scheduler (date);`
 	return nil
 }
 
+func scanTasks(rows *sql.Rows) ([]*Task, error) {
+	responseTasks := []*Task{}
+	for rows.Next() {
+		var currentTask Task
+	
+		err := rows.Scan(&currentTask.ID, &currentTask.Date, &currentTask.Title, &currentTask.Comment, &currentTask.Repeat)
+		if err != nil {
+			return responseTasks, err
+		}
+		responseTasks = append(responseTasks, &currentTask)
+	}
+	return responseTasks, nil
+}
+
 func AddTask(task *Task) (int64, error) {
     var id int64
     query := `INSERT INTO scheduler (date, title, comment, repeat) VALUES (:date, :title, :comment, :repeat)`
@@ -66,23 +80,13 @@ func AddTask(task *Task) (int64, error) {
 }
 
 func Tasks(amount int64) ([]*Task, error){
-	responseTasks := []*Task{}
 	rows, err := db.Query("SELECT id, date, title, comment, repeat FROM scheduler ORDER BY id LIMIT :amount", sql.Named("amount", amount))
 	if err != nil {
-		return responseTasks, err
+		return []*Task{}, err
 	}
 	defer rows.Close()
 
-	for rows.Next() {
-		var currentTask Task
-	
-		err := rows.Scan(&currentTask.ID, &currentTask.Date, &currentTask.Title, &currentTask.Comment, &currentTask.Repeat)
-		if err != nil {
-			return responseTasks, err
-		}
-		responseTasks = append(responseTasks, &currentTask)
-	}
-	return responseTasks, nil
+	return scanTasks(rows)
 }
 
 func GetTask(id string) (*Task, error) {

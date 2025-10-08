@@ -115,7 +115,7 @@ func nextWeekdayDate(currentTime, startDate time.Time, parts []string) (string, 
 			currentWeekday = 7
 		}
 
-		if weekdays[currentWeekday] && !searchDate.Before(startDate) {
+		if weekdays[currentWeekday] && searchDate.After(startDate) {
 			return searchDate.Format("20060102"), nil
 		}
 		searchDate = searchDate.AddDate(0, 0, 1)
@@ -193,7 +193,7 @@ func nextMonthDate(currentTime, startDate time.Time, parts []string) (string, er
 			found = true
 		}
 
-		if found && !searchDate.Before(startDate) {
+		if found && searchDate.After(startDate) {
 			return searchDate.Format("20060102"), nil
 		}
 
