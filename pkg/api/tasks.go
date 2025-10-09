@@ -29,10 +29,12 @@ func TasksHandler(w http.ResponseWriter, r *http.Request) {
 	
 	if err != nil {
 		jsonError.Error = err.Error()
+		w.WriteHeader(http.StatusBadRequest)
 		writeJson(w, jsonError)
 		return
 	}
 	
+	w.WriteHeader(http.StatusOK)
 	writeJson(w, TasksResp{
 		Tasks: tasks,
 	})
