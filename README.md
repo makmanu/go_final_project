@@ -22,6 +22,7 @@
 - TODO_PASSWORD - запрашиваемый пароль для аутентификации
 
 Запустите из корневой папки с помощью команды ```go run .```
+
 2. С помощью докер образа
 
 Запустить докер образ можно командой ```docker run -p 5050:5050 --env TODO_PORT="5050" --env TODO_PASSWORD="testpassword" --env TODO_DBFILE="./pkg/db/scheduler.db" -v ./pkg/db:/app/pkg/db/ makmanu/todo_list```
