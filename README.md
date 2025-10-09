@@ -14,11 +14,13 @@
 
 # Способы запуска
 
-1. С помощью golang\n
+1. С помощью golang
+
 Укажите 3 переменные среды:
 - TODO_PORT - порт который будет слушать приложение
 - TODO_DBFILE - путь до файла в котором хранится датабаза
-- TODO_PASSWORD - запрашиваемый пароль для аутентификации\n
+- TODO_PASSWORD - запрашиваемый пароль для аутентификации
+
 Запустите из корневой папки с помощью команды ```go run .```
 2. С помощью докер образа
 запустить докер образ можно командой ```docker run -p 5050:5050 --env TODO_PORT="5050" --env TODO_PASSWORD="testpassword" --env TODO_DBFILE="./pkg/db/scheduler.db" -v ./pkg/db:/app/pkg/db/ makmanu/todo_list```
