@@ -62,6 +62,9 @@ func scanTasks(rows *sql.Rows) ([]*Task, error) {
 		}
 		responseTasks = append(responseTasks, &currentTask)
 	}
+	if err := rows.Err(); err != nil {
+		return []*Task{}, err
+	}
 	return responseTasks, nil
 }
 
