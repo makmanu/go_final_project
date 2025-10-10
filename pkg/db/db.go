@@ -51,6 +51,10 @@ CREATE INDEX scheduler_date ON scheduler (date);`
 	return nil
 }
 
+func Close() {
+	db.Close()
+}
+
 func scanTasks(rows *sql.Rows) ([]*Task, error) {
 	responseTasks := []*Task{}
 	for rows.Next() {

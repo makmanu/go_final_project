@@ -17,6 +17,7 @@ func main() {
 	if err != nil{
 		log.Fatalln("Database initialization err:", err)
 	}
+	defer db.Close()
 	envPort := os.Getenv("TODO_PORT")
 	if envPort== "" {
 		envPort = "7540"
