@@ -8,7 +8,6 @@ import (
 )
 
 func getTaskById(w http.ResponseWriter, r *http.Request) {
-	log.Println("start to handle /api/task get")
 	id := r.URL.Query().Get("id")
 	if len(id) == 0 {
 		jsonError.Error = "missing ID"

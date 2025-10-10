@@ -10,7 +10,6 @@ import (
 
 
 func TaskDone(w http.ResponseWriter, r *http.Request) {
-	log.Println("start to handle /api/task/done")
 	if !r.URL.Query().Has("id") {
 		jsonError.Error = "no id"
 		w.WriteHeader(http.StatusBadRequest)

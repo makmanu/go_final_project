@@ -13,9 +13,6 @@ type TasksResp struct {
 }
 
 func TasksHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("start to handle /api/tasks")
-	
-	// Получаем параметр search из query string
 	search := r.URL.Query().Get("search")
 	
 	var tasks []*db.Task

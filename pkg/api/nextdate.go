@@ -13,7 +13,6 @@ import (
 
 func HandleQuery(w http.ResponseWriter, req *http.Request) {
 	var now string
-	log.Println("start to handle /api/nextdate")
 	if req.URL.Query().Has("now"){
 		now = req.URL.Query().Get("now")
 	} else {
