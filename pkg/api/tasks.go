@@ -11,6 +11,8 @@ type TasksResp struct {
     Tasks []*db.Task `json:"tasks"`
 }
 
+const limit = 50
+
 func TasksHandler(w http.ResponseWriter, r *http.Request) {
 	search := r.URL.Query().Get("search")
 	
@@ -18,9 +20,9 @@ func TasksHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	
 	if search != "" {
-		tasks, err = db.SearchTasks(search, 50)
+		tasks, err = db.SearchTasks(search, limit)
 	} else {
-		tasks, err = db.Tasks(50)
+		tasks, err = db.Tasks(limit)
 	}
 	
 	if err != nil {
