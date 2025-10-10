@@ -3,7 +3,6 @@ package api
 import (
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -29,8 +28,10 @@ func HandleQuery(w http.ResponseWriter, req *http.Request) {
 	date := req.URL.Query().Get("date")
 	repeat := req.URL.Query().Get("repeat")
 	response, err := nextDate(now, date, repeat)
-	if err != nil {
-		fmt.Fprint(w, err)
+	if err != nil{
+		jsonError.Error = err.Error()
+		w.WriteHeader(http.StatusBadRequest)
+		writeJson(w, jsonError)
 		return
 	}
 	fmt.Fprint(w, response)
