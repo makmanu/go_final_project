@@ -9,8 +9,8 @@ import (
 )
 
 func Start_server(port string) error {
-	password := os.Getenv("TODO_PASSWORD")
-    if password != "" {
+	Password := os.Getenv("TODO_PASSWORD")
+    if Password != "" {
         log.Println("Authentication is enabled")
     } else {
         log.Println("Authentication is disabled - TODO_PASSWORD not set")

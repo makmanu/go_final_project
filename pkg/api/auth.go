@@ -24,6 +24,12 @@ type AuthResponse struct {
     Error string `json:"error,omitempty"`
 }
 
+var envPassword string
+
+func init() {
+    envPassword = os.Getenv("TODO_PASSWORD")
+}
+
 func generatePasswordHash(password string) string {
     hash := sha256.Sum256([]byte(password))
     return hex.EncodeToString(hash[:])
@@ -128,8 +134,6 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 
 func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        envPassword := os.Getenv("TODO_PASSWORD")
-        
         if envPassword == "" {
             next.ServeHTTP(w, r)
             return
