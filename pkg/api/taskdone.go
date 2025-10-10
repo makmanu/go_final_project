@@ -39,7 +39,7 @@ func TaskDone(w http.ResponseWriter, r *http.Request) {
 		writeJson(w, jsonError)
 		return
 	}
-	currentTask.Date, err = nextDate(time.Now().Format("20060102"), currentTask.Date, currentTask.Repeat)
+	currentTask.Date, err = nextDate(time.Now().Format(dateLayout), currentTask.Date, currentTask.Repeat)
 	if err != nil{
 		jsonError.Error = err.Error()
 		w.WriteHeader(http.StatusBadRequest)

@@ -17,7 +17,7 @@ func HandleQuery(w http.ResponseWriter, req *http.Request) {
 	if req.URL.Query().Has("now"){
 		now = req.URL.Query().Get("now")
 	} else {
-		now = time.Now().Format("20060102")
+		now = time.Now().Format(dateLayout)
 	}
 	if !(req.URL.Query().Has("date") && req.URL.Query().Has("repeat")) {
 		fmt.Fprint(w, "err: not enough args\nwant to see[date, repeat]")
@@ -45,12 +45,12 @@ func nextDate(now string, dstart string, repeat string) (string, error) {
 		return "", errors.New("repeat rule is missing")
 	}
 
-	nowParsed, err := time.Parse("20060102", now)
+	nowParsed, err := time.Parse(dateLayout, now)
 	if err != nil {
 		return "", err
 	}
 
-	dateTime, err := time.Parse("20060102", dstart)
+	dateTime, err := time.Parse(dateLayout, dstart)
 	if err != nil {
 		return "", err
 	}
@@ -86,7 +86,7 @@ func nextDate(now string, dstart string, repeat string) (string, error) {
 		return "", errors.New("invalid rule for next date: "+repeatRules[0])
 	}	
 
-	return resultDate.Format("20060102"), nil
+	return resultDate.Format(dateLayout), nil
 }
 
 func nextWeekdayDate(currentTime, startDate time.Time, parts []string) (string, error) {
@@ -116,7 +116,7 @@ func nextWeekdayDate(currentTime, startDate time.Time, parts []string) (string, 
 		}
 
 		if weekdays[currentWeekday] && searchDate.After(startDate) {
-			return searchDate.Format("20060102"), nil
+			return searchDate.Format(dateLayout), nil
 		}
 		searchDate = searchDate.AddDate(0, 0, 1)
 	}
@@ -194,7 +194,7 @@ func nextMonthDate(currentTime, startDate time.Time, parts []string) (string, er
 		}
 
 		if found && searchDate.After(startDate) {
-			return searchDate.Format("20060102"), nil
+			return searchDate.Format(dateLayout), nil
 		}
 
 		searchDate = searchDate.AddDate(0, 0, 1)

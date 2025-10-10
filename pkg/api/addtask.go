@@ -18,23 +18,25 @@ type taskError struct {
 }
 var jsonError taskError
 
+const dateLayout = "20060102"
+
 func checkDate(task *db.Task) error {
 	now := time.Now()
 	if len(task.Date) == 0 {
-            task.Date = now.Format("20060102")
+            task.Date = now.Format(dateLayout)
 	}
-	if task.Date == now.Format("20060102") {
+	if task.Date == now.Format(dateLayout) {
 			return nil
 	}
-	t, err := time.Parse("20060102", task.Date)
+	t, err := time.Parse(dateLayout, task.Date)
 	if err != nil {
 		return err
 	}
 	if afterNow(now, t) {
         if len(task.Repeat) == 0 {
-            task.Date = now.Format("20060102")
+            task.Date = now.Format(dateLayout)
         } else {
-            task.Date, err = nextDate(now.Format("20060102"), task.Date, task.Repeat)		
+            task.Date, err = nextDate(now.Format(dateLayout), task.Date, task.Repeat)		
 			if err != nil {
 				return err
 			}
