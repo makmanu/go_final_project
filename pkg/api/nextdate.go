@@ -13,6 +13,10 @@ import (
 
 func HandleQuery(w http.ResponseWriter, req *http.Request) {
 	var now string
+	if req.Method != http.MethodGet {
+        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
 	if req.URL.Query().Has("now"){
 		now = req.URL.Query().Get("now")
 	} else {
