@@ -1,0 +1,39 @@
+package api
+
+import (
+	"net/http"
+
+	"github.com/makmanu/go_final_project/pkg/db"
+)
+
+
+type TasksResp struct {
+    Tasks []*db.Task `json:"tasks"`
+}
+
+const limit = 50
+
+func TasksHandler(w http.ResponseWriter, r *http.Request) {
+	search := r.URL.Query().Get("search")
+	
+	var tasks []*db.Task
+	var err error
+	
+	if search != "" {
+		tasks, err = db.SearchTasks(search, limit)
+	} else {
+		tasks, err = db.Tasks(limit)
+	}
+	
+	if err != nil {
+		jsonError.Error = err.Error()
+		w.WriteHeader(http.StatusBadRequest)
+		writeJson(w, jsonError)
+		return
+	}
+	
+	w.WriteHeader(http.StatusOK)
+	writeJson(w, TasksResp{
+		Tasks: tasks,
+	})
+}
